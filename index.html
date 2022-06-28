@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="width: 500px; padding: 200px;margin:0 auto;">
+        <h3 style="padding:30px 0;">카카오톡 알림톡 Signature 생성기</h3>
+        <div style="margin: 0 auto;">
+            <div style="width: 100px;">Service ID: <input id="key-service" type="text"></div>
+            <div style="width: 100px;">Accese Key: <input id="key-accese" type="text"></div>
+            <div style="width: 100px;">Secret Key: <input id="key-secret" type="text"></div>
+        </div>
+        <div style="margin-top: 30px;">
+            <button id="create">생성하기</button>
+        </div>
+        
+        <input type="text" disabled id="result" style="margin: 30px 0; padding-left:10px; width: 400px; height: 30px;"></input>
+    </div>
+    
+    
+    
+</body>
+    <script type="text/javascript" src="rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="components/enc-base64.js"></script>
+    <script type="text/javascript">
+        const result = document.querySelector("#result");
+        const target = document.querySelector("#create");
+        target.addEventListener("click", function(){
+            // 카카오톡 알림톡 Signature 발급
+            // My Setting Value
+            const serviceId = document.querySelector("#key-service").toString();                       // 서비스 아이디(NCP 프로젝트 생성 후)
+            const accessKey = document.querySelector("#key-accese").toString();                       // access key id (from portal or Sub Account)
+            const secretKey = document.querySelector("#key-secret").toString();                       // secret key (from portal or Sub Account)
+    
+            const url = `https://sens.apigw.ntruss.com/alimtalk/v2/services/${serviceId}/messages`;	    // 풀 url
+            const url2 = `/alimtalk/v2/services/${serviceId}/messages`;                                 // 
+    
+            const method = "POST";				                // method
+            const nowDate = Date.now().toString();              // 실제 시간과 5분 이상 차이날 경우 X
+            const timestamp = nowDate;		                    // current timestamp (epoch)
+            const space = " ";				                    // one space
+            const newLine = "\n";				                // new line
+    
+            // Hashing
+            let hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, secretKey);
+            hmac.update(method);
+            hmac.update(space);
+            hmac.update(url2);
+            hmac.update(newLine);
+            hmac.update(timestamp);
+            hmac.update(newLine);
+            hmac.update(accessKey);
+            const hash = hmac.finalize();
+            const signature = hash.toString(CryptoJS.enc.Base64);
+    
+            // 출력
+            console.log(signature);
+            result.value = signature;
+        });
+
+        
+    </script>
+</html>
