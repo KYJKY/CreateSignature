@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Signature 생성기</title>
 </head>
 <body>
     <div style="width: 500px; padding: 200px;margin:0 auto;">
@@ -19,6 +19,7 @@
         </div>
         
         <input type="text" disabled id="result" style="margin: 30px 0; padding-left:10px; width: 400px; height: 30px;"></input>
+        <button id="clone" style="width:60px; height:36px; border:0;">복사</button>
     </div>
     
     
@@ -60,6 +61,22 @@
             // 출력
             console.log(signature);
             result.value = signature;
+        });
+
+
+        const clone = document.querySelector('#clone');
+        clone.addEventListener("click", function(){
+            const temp = document.createElement('textarea')
+
+            document.body.appendChild(temp)
+
+            temp.value = result.value
+            temp.select()
+
+            document.execCommand('copy')
+            document.body.removeChild(temp)
+
+            window.alert('복사 완료')
         });
 
         
