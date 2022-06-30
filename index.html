@@ -18,8 +18,13 @@
             <button id="create">생성하기</button>
         </div>
         
-        <input type="text" disabled id="result" style="margin: 30px 0; padding-left:10px; width: 400px; height: 30px;"></input>
-        <button id="clone" style="width:60px; height:36px; border:0;">복사</button>
+        <div style="margin-top:50px">
+            <h4>결과</h4>
+            <input type="text" disabled id="time" style="padding-left:10px; width: 400px; height: 30px;"></input>
+            <button id="cloneTime" style="width:60px; height:36px; border:0;">복사</button>
+            <input type="text" disabled id="result" style="margin-top: 20px; padding-left:10px; width: 400px; height: 30px;"></input>
+            <button id="cloneResult" style="width:60px; height:36px; border:0;">복사</button>
+        </div>
     </div>
     
     
@@ -29,6 +34,7 @@
     <script type="text/javascript" src="components/enc-base64.js"></script>
     <script type="text/javascript">
         const result = document.querySelector("#result");
+        const time = document.querySelector("#time");
         const target = document.querySelector("#create");
         target.addEventListener("click", function(){
             // 카카오톡 알림톡 Signature 발급
@@ -61,11 +67,12 @@
             // 출력
             console.log(signature);
             result.value = signature;
+            time.value = timestamp;
         });
 
 
-        const clone = document.querySelector('#clone');
-        clone.addEventListener("click", function(){
+        const cloneResult = document.querySelector('#cloneResult');
+        cloneResult.addEventListener("click", function(){
             const temp = document.createElement('textarea')
 
             document.body.appendChild(temp)
@@ -79,6 +86,20 @@
             window.alert('복사 완료')
         });
 
+        const cloneTime = document.querySelector('#cloneTime');
+        cloneTime.addEventListener("click", function(){
+            const temp = document.createElement('textarea')
+
+            document.body.appendChild(temp)
+
+            temp.value = time.value
+            temp.select()
+
+            document.execCommand('copy')
+            document.body.removeChild(temp)
+
+            window.alert('복사 완료')
+        });
         
     </script>
 </html>
